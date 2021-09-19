@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>test</title>
+<style>
+body {
+  background-color: white;
+  text-align: left;
+  color: black;
+  font-family: Arial, Helvetica, sans-serif;
+}
+</style>
+
+<script>
+
+    const students = ['Eden', 'Refael', 'Yoel', 'Yoni', 'Nitzan', 'Hadas'] ; 
+
+    const attendees = [['Eden', 'Yoel', 'Refael', 'Yoni', 'Nitzan', 'Hadas', 'Ortal', 'Yoel'], 
+                        ['Berry','Yoel', 'Nitzan','Yoel', 'Yoni', 'Eden', 'Hadas', 'Ortal'], 
+                        ['Maxim','Yoel', 'Ortal', 'Yoni', 'Refael', 'Nitzan', 'Alex'], 
+                        ['Eden', 'Andrew', 'Yoni' , 'Nitzan', 'Ortal','Nitzan']
+                    ];
+    const numberOfStudents =  4 ;
+    const strLabelForResult =    '<br>Top &nbsp' + numberOfStudents +  '&nbsp Students Attendees: ' ;
+
+   
+    //check is student 
+    function isStudent (name ) {
+
+        if ( !students.includes(name) ) {
+            return false ; 
+        }else {
+            return true ; 
+        }
+
+    };
+
+    //Sort summarized Students Attendees  
+    function sortAttendeesStudents (NStudentsAttendees) {
+        const NStudentsAttendeesSorted = new Map([...NStudentsAttendees.entries()].sort((a, b) => b[1] - a[1]));
+        return NStudentsAttendeesSorted ; 
+    };
+
+    //summarize Students Attendees  
+    function summarizeNStudentsAttendees (uniqeAttendees) {
+        const mapTotalAttendeesStudents = new Map();
+        for (let j = 0; j < uniqeAttendees.length; j++) {
+            for (let i = 0; i < uniqeAttendees[j].length; i++) {
+                if (isStudent (uniqeAttendees [j][i]) ) {
+                    var studentExistInSet = mapTotalAttendeesStudents.get (uniqeAttendees [j][i])  ; 
+                    if (studentExistInSet ){
+                        studentExistInSet ++; 
+                        mapTotalAttendeesStudents.set (uniqeAttendees [j][i],studentExistInSet ) ; 
+                    }else {
+                        mapTotalAttendeesStudents.set (uniqeAttendees [j][i],1 ) ; 
+                    }
+                } 
+            }      
+        }
+        return mapTotalAttendeesStudents ; 
+    };
+
+    //Print the results
+    function printNSortedResults (NStudentsAttendeesSorted , numberOfStudents) {
+
+        const keys = NStudentsAttendeesSorted.keys() ; 
+
+        for (let index = 0; index < numberOfStudents  ; index++) {
+            var name = keys.next().value
+            if (name) {
+                document.getElementById("topNStudentsAttendees").innerHTML += '&nbsp' + name + '&nbsp ==> ' + NStudentsAttendeesSorted.get(name)  + "<br>"; 
+                 
+            }
+            
+            
+        }
+
+    }
+
+
+    function topNStudentsAttendees (students , attendees , numberOfStudents ) {
+
+        var mapUniqeAttendeesStudents = new Array();
+        
+
+        //Remove doplicate
+        for (let j = 0; j < attendees.length; j++) {
+            mapUniqeAttendeesStudents[j] = [...new Set( attendees[j])] ;            
+        }
+        //Check if Attendees is student and sumeraise 
+        var NStudentsAttendees =  summarizeNStudentsAttendees (mapUniqeAttendeesStudents ) ; 
+
+        //sort NStudentsAttendees
+        var NStudentsAttendeesSorted =  sortAttendeesStudents (NStudentsAttendees) ; 
+
+        //print N Sorted results :
+
+        printNSortedResults (NStudentsAttendeesSorted , numberOfStudents) ; 
+
+        
+    };
+
+    //Print results
+    function printResults() {
+
+        //print students members
+        for (let ind = 0; ind < students.length; ind++) {
+            document.getElementById("students").innerHTML += students [ind] + ',&nbsp' ; 
+        }
+        
+        //print attendees members
+        for (let j = 0; j < attendees.length; j++) {
+            for (let i = 0; i < attendees[j].length; i++) {
+                document.getElementById("attendees").innerHTML += attendees [j][i] + ',&nbsp' ; 
+            }
+            document.getElementById("attendees").innerHTML +=   '<br>' ; 
+        }
+
+         //print results
+         document.getElementById("attendees").innerHTML +=  strLabelForResult ; 
+
+         topNStudentsAttendees (students , attendees , numberOfStudents ) ; 
+        
+         document.getElementById("submit").disabled = true ;
+
+    }
+</script>
+
+
+</head>
+<body>
+
+    <h1> TEST for Node.js Fundamentals Course </h1>
+    <p id="students"> Students: <br><br>  </p>
+    <p id="attendees"> Attendees: <br><br> </p>
+    <p id="topNStudentsAttendees">   </p>
+
+    <button id='submit' type="button" onclick="printResults()">Click Me!</button>
+
+
+</body>
+</html>
